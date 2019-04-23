@@ -1,6 +1,4 @@
-using System;
-
-namespace FRWeb.Models
+﻿namespace FRWeb.Models
 {
     public class ErrorViewModel
     {

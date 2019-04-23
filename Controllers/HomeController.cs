@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using FRWeb.Models;
+using System.Collections.Generic;
+using RiggVar.FR;
 
 namespace FRWeb.Controllers
 {
@@ -31,6 +29,15 @@ namespace FRWeb.Controllers
 
         public IActionResult Privacy()
         {
+            return View();
+        }
+
+        public IActionResult Info()
+        {
+            //List<string> sl = new List<string>();
+            //Dummy.ApiCol.GetApiList(sl, ApiControllerEnum.Delphi, false);
+
+            ViewData.Model = Dummy.ApiCol.GetLinqList(); //Dummy.ApiCol.GetItems(ApiControllerEnum.Delphi);
             return View();
         }
 

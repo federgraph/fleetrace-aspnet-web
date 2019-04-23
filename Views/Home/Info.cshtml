@@ -1,0 +1,33 @@
+﻿@model IEnumerable<RiggVar.FR.ApiGroupItem>
+
+@{
+    ViewData["Title"] = "Api Info";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>Dash Urls by Controller</h3>
+
+@foreach (var g in Model)
+{
+    <h4>@g.ControllerName</h4>
+    <pre>
+    @foreach (var item in g.ControllerItems)
+    {
+        @(item.MethodCaption + ": " + item.UrlString + 'n');
+    }
+    </pre>
+}
+
+<h3>Net Urls by Controller</h3>
+
+@foreach (var g in Model)
+{
+    <h4>@g.ControllerName</h4>
+    <pre>
+    @foreach (var item in g.ControllerItems)
+    {
+        @(item.MethodCaption + ": " + item.UrlStringNet + '\n');
+    }
+    </pre>
+}

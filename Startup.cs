@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
+using System.IO;
 
 namespace FRWeb
 {
@@ -31,9 +28,27 @@ namespace FRWeb
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            var mvc = services.AddMvc();
+            mvc.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            mvc.AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-        }
+            // In production, the Angular files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                string dn = System.AppDomain.CurrentDomain.BaseDirectory;
+                dn = dn.Substring(0, dn.IndexOf("fleetrace-aspnet-web"));
+                dn = Path.Combine(dn, "fleetrace-angular-fr03a1", "dist", "FR03A1");
+
+                if (Directory.Exists(dn))
+                {
+                    configuration.RootPath = dn;
+                }
+                //configuration.RootPath = "D:/Angular/FR03A1/dist/FR03A1";
+                //configuration.RootPath = "D:/Angular/FR05J/dist/FR05J";
+                //configuration.RootPath = "ClientApp";
+            });
+
+      }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -50,6 +65,7 @@ namespace FRWeb
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSpaStaticFiles();
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>
@@ -58,6 +74,8 @@ namespace FRWeb
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
+
 }
